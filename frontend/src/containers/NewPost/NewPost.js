@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button, Col, Form, FormGroup, Input, Label} from "reactstrap";
-import {Editor} from 'react-draft-wysiwyg';
 import {sendPost} from "../../store/actions/postsActions";
 import {connect} from "react-redux";
 
@@ -8,7 +7,7 @@ class NewPost extends Component {
     state = {
         title: '',
         image: '',
-        description: null
+        description: ''
     };
 
     submitFormHandler = event => {
@@ -17,13 +16,7 @@ class NewPost extends Component {
         const formData = new FormData();
 
         Object.keys(this.state).forEach(key => {
-            let value = this.state[key];
-
-            if (key === 'description') {
-                value = JSON.stringify(value);
-            }
-
-            formData.append(key, value);
+            formData.append(key, this.state[key]);
         });
 
         this.props.sendPost(formData);
@@ -41,17 +34,15 @@ class NewPost extends Component {
         })
     };
 
-    editorChangeHandler = description => {
-        this.setState({description});
-    };
-
     render() {
         return (
             <Form onSubmit={this.submitFormHandler}>
+                <span style={{color: "red"}}>{this.props.error}</span>
                 <FormGroup row>
                     <Label sm={2} for="title">Title</Label>
                     <Col sm={10}>
                         <Input
+                            required
                             type="text"
                             name="title" id="title"
                             placeholder="Enter title"
@@ -63,9 +54,13 @@ class NewPost extends Component {
                 <FormGroup row>
                     <Label sm={2} for="description">Description</Label>
                     <Col sm={10}>
-                        <Editor
-                            contentState={null}
-                            onContentStateChange={this.editorChangeHandler}
+                        <Input
+                            type="text"
+                            name="description"
+                            id="description"
+                            value={this.state.description}
+                            onChange={this.inputChangeHandler}
+                            placeholder="Enter description"
                         />
                     </Col>
                 </FormGroup>
@@ -90,7 +85,8 @@ class NewPost extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.users.user
+    user: state.users.user,
+    error: state.posts.error
 });
 
 const mapDispatchToProps = dispatch => ({

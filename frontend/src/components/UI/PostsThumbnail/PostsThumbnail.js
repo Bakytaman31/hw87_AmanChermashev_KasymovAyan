@@ -13,10 +13,12 @@ const PostThumbnail = props => {
     let image = chat;
 
     if (props.image) {
-        image = apiURL + '/uploads/' + props.image;
+        image = apiURL + 'uploads/' + props.image;
+    } else if (props.image === 'chat.jpg') {
+        image = chat;
     }
 
-    return <img alt="product" src={image} style={styles} className="img-thumbnail" />;
+    return <img alt="post" src={image} style={styles} className="img-thumbnail" />;
 };
 
 export default PostThumbnail;

@@ -48,20 +48,23 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', [bodyParser.json(), auth, upload.single('image')], async (req, res) => {
-    const postData = req.body;
-    const user = req.user;
-    postData.author = user._id;
-
-    if (!req.file && !req.body.description) {
-        return res.status(400).send({error: 'You have to fill at least description or image field'})
-    } else if (req.file) {
-        postData.image = req.file.filename;
-    }
-
-    const post = new Post(postData);
-
+router.post('/', [auth, upload.single('image')], async (req, res) => {
     try {
+        const postData = req.body;
+        console.log(postData);
+        const user = req.user;
+        postData.author = user._id;
+
+        if (!postData.image) {
+            postData.image = 'chat.jpg'
+        }
+
+        if (req.file) {
+            postData.image = req.file.filename;
+        }
+
+        const post = new Post(postData);
+
         await post.save();
 
         return res.send("Saved");

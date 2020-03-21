@@ -7,7 +7,12 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
-    description: String,
+    description: {
+        type: String,
+        required: [function () {
+            if (this.image === 'chat.jpg') return true
+        }]
+    },
     image: String,
     author: {
         type: Schema.Types.ObjectId,
@@ -17,7 +22,7 @@ const PostSchema = new Schema({
     datetime: {
         type: String,
         required: true,
-        default: () => new Date(+new Date() + 7*24*60*60*1000)
+        default: Date.now()
     }
 });
 

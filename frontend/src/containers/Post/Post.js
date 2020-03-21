@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {EditorState, convertFromRaw} from 'draft-js';
-import {Editor} from 'react-draft-wysiwyg';
 import {connect} from "react-redux";
 import {getPost} from "../../store/actions/postsActions";
 import PostCard from "../../components/Cards/PostCard/PostCard";
@@ -24,16 +22,6 @@ class ProductPage extends Component {
         }
     }
 
-    getDescription = () => {
-        try {
-            const description = EditorState.createWithContent(convertFromRaw(JSON.parse(this.props.post.description)));
-
-            return <Editor readOnly toolbarHidden editorState={description}/>;
-        } catch (e) {
-            return "No description available";
-        }
-    };
-
     inputChangeHandler = event => {
         this.setState({[event.target.name]: event.target.value})
     };
@@ -55,7 +43,7 @@ class ProductPage extends Component {
                     datetime={this.props.post.datetime}
                     author={this.props.post.author.username}
                     image={this.props.post.image}
-                    description={this.getDescription}
+                    description={this.props.post.description}
                 />
                 <Form onSubmit={this.onSubmitHandler}>
                     <FormGroup>

@@ -21,7 +21,6 @@ router.post('/', [bodyParser.json(), auth], async (req,res) => {
 
 router.get('/:id', auth, async (req,res) => {
     try {
-        console.log(req.params.id);
         const comments = await Comment.find({postId: req.params.id}).populate('author');
         res.send(comments);
     } catch (e) {
