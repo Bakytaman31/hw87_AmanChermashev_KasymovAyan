@@ -10,12 +10,12 @@ const styles = {
 };
 
 const PostThumbnail = props => {
-    let image = chat;
+    let image;
 
-    if (props.image) {
-        image = apiURL + 'uploads/' + props.image;
-    } else if (props.image === 'chat.jpg') {
+    if (props.image === 'chat.jpg') {
         image = chat;
+    } else if (props.image) {
+        image = apiURL + 'uploads/' + props.image;
     }
 
     return <img alt="post" src={image} style={styles} className="img-thumbnail" />;
